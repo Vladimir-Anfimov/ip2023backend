@@ -25,4 +25,14 @@ public class Schedule
     @ManyToOne
     @JoinColumn(name = "restaurant_id", referencedColumnName = "id")
     private Restaurant restaurant;
+
+    public Schedule(String dayOfWeek, String openingTime, String closingTime, Restaurant restaurant) {
+        this.dayOfWeek = dayOfWeek;
+        this.openingTime = openingTime;
+        this.closingTime = closingTime;
+    }
+
+    public void setRestaurant(Restaurant restaurant) {
+        this.restaurant = restaurant;
+    }
 }

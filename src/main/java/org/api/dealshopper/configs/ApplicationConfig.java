@@ -1,6 +1,7 @@
 package org.api.dealshopper.configs;
 
 import lombok.RequiredArgsConstructor;
+import org.api.dealshopper.repositories.RestaurantRepository;
 import org.api.dealshopper.repositories.UserRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,7 +19,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class ApplicationConfig {
 
     private final UserRepository repository;
-
+    private final RestaurantRepository restaurantRepository;
     @Bean
     public UserDetailsService userDetailsService() {
         return username -> repository.findByEmail(username)

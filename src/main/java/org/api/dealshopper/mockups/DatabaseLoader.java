@@ -1,12 +1,13 @@
 package org.api.dealshopper.mockups;
 
-import org.api.dealshopper.domain.Role;
+import org.api.dealshopper.domain.*;
+import org.api.dealshopper.repositories.RestaurantRepository;
 import org.api.dealshopper.repositories.RoleRepository;
 import org.api.dealshopper.repositories.UserRepository;
-import org.api.dealshopper.domain.User;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
@@ -17,12 +18,12 @@ public class DatabaseLoader implements CommandLineRunner {
 
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
+    private final RestaurantRepository restaurantRepository;
 
-
-    public DatabaseLoader(UserRepository userRepository, RoleRepository roleRepository)
-    {
+    public DatabaseLoader(UserRepository userRepository, RoleRepository roleRepository, RestaurantRepository restaurantRepository) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
+        this.restaurantRepository = restaurantRepository;
     }
 
     @Override
@@ -50,6 +51,10 @@ public class DatabaseLoader implements CommandLineRunner {
                 "07",
                 "123",
                 role);
+        Restaurant restaurant1 = new Restaurant(null, "Iasi", null,null, "0756", "Glovo", "Iasi");
+        Restaurant restaurant2 = new Restaurant(null, "Bacau", null, null, "075689", "Glovo", "Iasi");
+
+
 
         /*User user3 = new User(
                 "sam",
@@ -63,5 +68,6 @@ public class DatabaseLoader implements CommandLineRunner {
 
         // Save the users to the database
         userRepository.saveAll(Arrays.asList(user1, user2));
+        restaurantRepository.saveAll(Arrays.asList(restaurant1,restaurant2));
     }
 }

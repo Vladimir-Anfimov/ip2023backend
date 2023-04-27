@@ -14,8 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 @Table(name = "restaurants")
-public class Restaurant
-{
+public class Restaurant {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -36,4 +35,19 @@ public class Restaurant
     private String platform;
 
     private String location;
+
+
+    public Restaurant(List<Product> menu, String address, List<Schedule> schedule, List<Review> reviews, String phoneNumber, String platform, String location) {
+        this.menu = menu;
+        this.address = address;
+        this.schedule = schedule;
+        this.reviews = reviews;
+        this.phoneNumber = phoneNumber;
+        this.platform = platform;
+        this.location = location;
+    }
+
+    public void setSchedule(List<Schedule> schedule) {
+        this.schedule = schedule;
+    }
 }

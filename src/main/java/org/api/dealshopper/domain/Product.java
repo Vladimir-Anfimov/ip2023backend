@@ -33,4 +33,13 @@ public class Product {
     @ManyToOne
     @JoinColumn(name = "restaurant_id", referencedColumnName = "id")
     private Restaurant restaurant;
+
+    public Product(float price, float rating, float deliveryCost, float discount, List<Ingredient> ingredients, Restaurant restaurant) {
+        this.price = price;
+        this.rating = rating;
+        this.deliveryCost = deliveryCost;
+        this.discount = discount;
+        this.ingredients = ingredients;
+        this.restaurant = restaurant;
+    }
 }
