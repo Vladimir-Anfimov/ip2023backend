@@ -63,5 +63,7 @@ public class DatabaseLoader implements CommandLineRunner {
 
         // Save the users to the database
         userRepository.saveAll(Arrays.asList(user1, user2));
+
+
     }
 }
