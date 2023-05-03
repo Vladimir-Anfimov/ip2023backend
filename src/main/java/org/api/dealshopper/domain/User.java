@@ -1,6 +1,7 @@
 package org.api.dealshopper.domain;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,29 +18,31 @@ public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private int id;
 
     @Column(unique = true)
+    @NotNull
     private String username;
 
+    @NotNull
     private String firstName;
 
+    @NotNull
     private String lastName;
 
-    @Column(unique = true)
-    private String email;
-
+    @NotNull
     private String password;
 
     private String phone;
 
+    @Column(unique = true)
+    @NotNull
+    private String email;
+
     private String address;
 
-    @OneToOne
-    @JoinColumn(name = "role_id", referencedColumnName = "id")
-    private Role role;
-
-    public User(String username, String firstName, String lastName, String email, String password, String phone, String address, Role role) {
+    public User(String username, String firstName, String lastName, String email, String password, String phone, String address)
+    {
         this.username = username;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -47,7 +50,6 @@ public class User implements UserDetails {
         this.password = password;
         this.phone = phone;
         this.address = address;
-        this.role = role;
     }
 
     @Override

@@ -2,12 +2,10 @@ package org.api.dealshopper.mockups;
 
 import org.api.dealshopper.domain.*;
 import org.api.dealshopper.repositories.RestaurantRepository;
-import org.api.dealshopper.repositories.RoleRepository;
 import org.api.dealshopper.repositories.UserRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
@@ -17,20 +15,15 @@ import java.util.Arrays;
 public class DatabaseLoader implements CommandLineRunner {
 
     private final UserRepository userRepository;
-    private final RoleRepository roleRepository;
     private final RestaurantRepository restaurantRepository;
 
-    public DatabaseLoader(UserRepository userRepository, RoleRepository roleRepository, RestaurantRepository restaurantRepository) {
+    public DatabaseLoader(UserRepository userRepository, RestaurantRepository restaurantRepository) {
         this.userRepository = userRepository;
-        this.roleRepository = roleRepository;
         this.restaurantRepository = restaurantRepository;
     }
 
     @Override
     public void run(String... args) throws Exception {
-        Role role = new Role("ROLE_USER");
-
-        roleRepository.save(role);
 
         User user1 = new User(
                 "test1",
@@ -39,8 +32,7 @@ public class DatabaseLoader implements CommandLineRunner {
                 "test1@yahoo.com",
                 "password",
                 "07",
-                "123",
-                role);
+                "123");
 
         User user2 = new User(
                 "test2",
@@ -49,8 +41,8 @@ public class DatabaseLoader implements CommandLineRunner {
                 "test2@gmail.com",
                 "password",
                 "07",
-                "123",
-                role);
+                "123");
+
         Restaurant restaurant1 = new Restaurant(null, "Iasi", null,null, "0756", "Glovo", "Iasi");
         Restaurant restaurant2 = new Restaurant(null, "Bacau", null, null, "075689", "Glovo", "Iasi");
 
