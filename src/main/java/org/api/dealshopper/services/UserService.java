@@ -1,13 +1,11 @@
 package org.api.dealshopper.services;
 
 import lombok.RequiredArgsConstructor;
-import org.api.dealshopper.domain.Role;
 import org.api.dealshopper.domain.User;
 import org.api.dealshopper.models.AuthenticationRequest;
 import org.api.dealshopper.models.AuthenticationResponse;
 import org.api.dealshopper.models.RegisterRequest;
 import org.api.dealshopper.models.RegisterResponse;
-import org.api.dealshopper.repositories.RoleRepository;
 import org.api.dealshopper.repositories.UserRepository;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -21,7 +19,6 @@ public class UserService {
     private final JwtService jwtService;
     private final PasswordEncoder passwordEncoder;
     private final UserRepository repository;
-    private final RoleRepository roleRepository;
     private final AuthenticationManager authenticationManager;
 
     /**
@@ -36,8 +33,7 @@ public class UserService {
 
         authenticationManager.authenticate(upaToken);
 
-        var user = repository.findByEmail(request.getEmail())
-                .orElseThrow();
+        var user = repository.findByEmail(request.getEmail()).orElseThrow();
 
         var jwtToken = jwtService.generateToken(user);
 
@@ -50,9 +46,6 @@ public class UserService {
      * saves the user in the database
      */
     public RegisterResponse register(RegisterRequest request) {
-        var role = new Role("ROLE_USER");
-
-        roleRepository.save(role);
 
         var user = User.builder()
                 .username(request.getUsername())
@@ -62,17 +55,18 @@ public class UserService {
                 .password(passwordEncoder.encode(request.getPassword()))
                 .phone(request.getPhone())
                 .address(request.getAddress())
-                .role(role)
                 .build();
 
-        var savedUser = repository.save(user);
 
-        //var jwtToken = jwtService.generateToken(savedUser);
+        var savedUser = repository.save(user);
+        /*
+        var jwtToken = jwtService.generateToken(savedUser);
+        */
 
         var jwtToken = login(AuthenticationRequest.builder()
-                        .email(request.getEmail()).
-                        password(request.getPassword()).
-                        build()
+                        .email(request.getEmail())
+                        .password(request.getPassword())
+                        .build()
                 )
                 .getToken();
 

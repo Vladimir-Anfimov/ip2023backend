@@ -12,14 +12,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/v1/security")
+@RequestMapping("/api/v1/users")
 @RequiredArgsConstructor
 public class UserController {
     private final UserService service;
 
-    @PostMapping("/login")
+    @PostMapping(value = "/login", consumes = "application/json")
     public ResponseEntity<?> login(
-            @RequestBody AuthenticationRequest request)
+            @RequestBody AuthenticationRequest request
+    )
     {
         try {
             AuthenticationResponse authenticationResponse = service.login(request);
@@ -31,9 +32,10 @@ public class UserController {
         }
     }
 
-    @PostMapping("/register")
+    @PostMapping(value = "/register", consumes = "application/json")
     public ResponseEntity<?> register(
-            @RequestBody RegisterRequest request)
+            @RequestBody RegisterRequest request
+    )
     {
         try {
             RegisterResponse registerResponse = service.register(request);
@@ -41,7 +43,7 @@ public class UserController {
         }
         catch (DataIntegrityViolationException e)
         {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Username already exists");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User already exists");
         }
         catch (Exception e)
         {
