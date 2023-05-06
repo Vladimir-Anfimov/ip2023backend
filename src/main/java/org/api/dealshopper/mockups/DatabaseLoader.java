@@ -43,6 +43,15 @@ public class DatabaseLoader implements CommandLineRunner {
                 "07",
                 "123");
 
+        User user3 = new User(
+                "test3",
+                "Bazic",
+                "Catalina",
+                "bazic3634@gmail.com",
+                "password",
+                "07",
+                "123");
+
         Restaurant restaurant1 = new Restaurant(null, "Iasi", null,null, "0756", "Glovo", "Iasi");
         Restaurant restaurant2 = new Restaurant(null, "Bacau", null, null, "075689", "Glovo", "Iasi");
 
@@ -59,7 +68,7 @@ public class DatabaseLoader implements CommandLineRunner {
                 role);*/
 
         // Save the users to the database
-        userRepository.saveAll(Arrays.asList(user1, user2));
+        userRepository.saveAll(Arrays.asList(user1, user2,user3));
         restaurantRepository.saveAll(Arrays.asList(restaurant1,restaurant2));
     }
 }
