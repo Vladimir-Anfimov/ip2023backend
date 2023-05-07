@@ -55,6 +55,7 @@ public class UserService {
                 .password(passwordEncoder.encode(request.getPassword()))
                 .phone(request.getPhone())
                 .address(request.getAddress())
+                .role("ROLE_USER")
                 .build();
 
 

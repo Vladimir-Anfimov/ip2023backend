@@ -25,7 +25,7 @@ public class DatabaseLoader implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
 
-        User user1 = new User(
+        /*User user1 = new User(
                 "test1",
                 "Ion",
                 "Ionescu",
@@ -56,10 +56,10 @@ public class DatabaseLoader implements CommandLineRunner {
                 "$2a$10$C7EQR9YL2HQ35D57I.woc.ALHFXdk7EyqYgZ.QOhXguamwqNLmKGO",
                 "07",
                 "main street",
-                role);*/
+                role);
 
         // Save the users to the database
         userRepository.saveAll(Arrays.asList(user1, user2));
-        restaurantRepository.saveAll(Arrays.asList(restaurant1,restaurant2));
+        restaurantRepository.saveAll(Arrays.asList(restaurant1,restaurant2));*/
     }
 }
