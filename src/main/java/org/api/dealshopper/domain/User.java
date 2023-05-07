@@ -25,9 +25,11 @@ public class User implements UserDetails {
     private String username;
 
     @NotNull
+    @Column(name = "firstname")
     private String firstName;
 
     @NotNull
+    @Column(name = "lastname")
     private String lastName;
 
     @NotNull
@@ -40,6 +42,9 @@ public class User implements UserDetails {
     private String email;
 
     private String address;
+
+    @NotNull
+    private String role;
 
     public User(String username, String firstName, String lastName, String email, String password, String phone, String address)
     {
