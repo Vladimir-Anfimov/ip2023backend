@@ -54,7 +54,7 @@ public class PasswordResetService {
         String token = UUID.randomUUID().toString();
         PasswordReset passwordResetToken = new PasswordReset(token, user);
         passwordResetTokenRepository.save(passwordResetToken);
-        String resetLink = "http://localhost:8090/password/reset" + "?token=" + token;
+        String resetLink = "http://localhost:8090/api/v1/users/password/reset/confirm" + "?token=" + token;
         String message = "Hello " + user.getFirstName() + " " + user.getLastName() + ",\n\n"
                 + "You have requested to reset your password. Please click the following link to reset your password:\n\n"
                 + resetLink + "\n\n"

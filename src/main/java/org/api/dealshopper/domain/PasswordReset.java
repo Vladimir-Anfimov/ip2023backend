@@ -17,7 +17,7 @@ import java.util.Date;
 public class PasswordReset {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long token_id;
+    private Long id;
     private String token;
     private Date expirationTime;
     private static final int EXPIRATION_TIME = 10;
