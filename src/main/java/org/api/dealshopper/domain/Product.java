@@ -1,5 +1,6 @@
 package org.api.dealshopper.domain;
 
+import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,6 +16,9 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "id")
 @Table(name = "products")
 public class Product {
     @Id
@@ -42,7 +46,6 @@ public class Product {
     @Column(name = "image")
     private String image;
 
-
     @ManyToOne
     @JoinColumn(name = "restaurant_id", referencedColumnName = "id")
     private Restaurant restaurant;
@@ -53,5 +56,4 @@ public class Product {
             joinColumns = @JoinColumn(name = "product_id"),
             inverseJoinColumns = @JoinColumn(name = "ingredient_id"))
     private List<Ingredient> ingredients;
-
 }

@@ -16,11 +16,12 @@ public class RestaurantController {
 
     @GetMapping
     public ResponseEntity<List<Restaurant>> getAllRestaurants() {
-        List<Restaurant> restaurants = restaurantService.findAllRestaurants();
-        if (restaurants == null || restaurants.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok().body(restaurants);
+            List<Restaurant> restaurants = restaurantService.findAllRestaurants();
+
+            if (restaurants == null || restaurants.isEmpty()) {
+                return ResponseEntity.notFound().build();
+            }
+            return ResponseEntity.ok().body(restaurants);
     }
 
     @GetMapping("/{id}")
