@@ -6,7 +6,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Data
 @Builder
@@ -17,29 +19,39 @@ import java.util.List;
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Integer id;
 
-    private float price;
+    @Column(name = "name", nullable = false)
+    private String name;
 
-    private float rating;
+    @Column(name = "price", nullable = false)
+    private Double price;
 
-    private float deliveryCost;
+    @Column(name = "weight")
+    private Double weight;
 
-    private float discount;
+    @Column(name = "discount")
+    private Double discount = 0.0;
 
-    @OneToMany
-    private List<Ingredient> ingredients;
+    @Column(name = "delivery_platform", nullable = false)
+    private String deliveryPlatform;
+
+    @Column(name = "category")
+    private String category;
+
+    @Column(name = "image")
+    private String image;
+
 
     @ManyToOne
     @JoinColumn(name = "restaurant_id", referencedColumnName = "id")
     private Restaurant restaurant;
 
-    public Product(float price, float rating, float deliveryCost, float discount, List<Ingredient> ingredients, Restaurant restaurant) {
-        this.price = price;
-        this.rating = rating;
-        this.deliveryCost = deliveryCost;
-        this.discount = discount;
-        this.ingredients = ingredients;
-        this.restaurant = restaurant;
-    }
+
+    @ManyToMany
+    @JoinTable(name = "ingr_prod",
+            joinColumns = @JoinColumn(name = "product_id"),
+            inverseJoinColumns = @JoinColumn(name = "ingredient_id"))
+    private List<Ingredient> ingredients;
+
 }
