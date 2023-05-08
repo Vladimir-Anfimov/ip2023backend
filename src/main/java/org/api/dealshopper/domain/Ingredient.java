@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.*;
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -17,11 +19,25 @@ public class Ingredient {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+
+    @Column(name = "name", nullable = false, unique = true)
     private String ingredientName;
 
-    private float quantity;
 
-    @ManyToOne
-    @JoinColumn(name = "product_id", referencedColumnName = "id")
-    private Product product;
+    @ManyToMany(mappedBy = "ingredients")
+    private List<Product> products;
+
+    /*
+    @ManyToMany
+    @JoinTable(name = "ingr_prod",
+              joinColumns = @JoinColumn(name = "ingredient_id"),
+              inverseJoinColumns = @JoinColumn(name = "product_id"))
+    private Set<Product> products = new HashSet<>();
+
+     */
 }
+/*
+The nullable = false attribute ensures that the name value cannot be null,
+ and unique = true attribute ensures that no two Ingredient entities have
+ the same name value.
+ */

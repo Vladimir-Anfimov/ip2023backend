@@ -8,28 +8,59 @@ import lombok.NoArgsConstructor;
 
 @Data
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
 @Entity
 @Table(name = "schedules")
-public class Schedule
-{
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+public class Schedule {
 
-    private String dayOfWeek;
-    private String openingTime;
-    private String closingTime;
+    @EmbeddedId
+    private ScheduleId id;
+
+    @Column(name = "open_time")
+    private Integer openTime;
+
+    @Column(name = "close_time")
+    private Integer closeTime;
 
     @ManyToOne
-    @JoinColumn(name = "restaurant_id", referencedColumnName = "id")
+    @MapsId("restaurantId")
+    @JoinColumn(name = "restaurant_id", insertable = false, updatable = false)
     private Restaurant restaurant;
 
-    public Schedule(String dayOfWeek, String openingTime, String closingTime, Restaurant restaurant) {
-        this.dayOfWeek = dayOfWeek;
-        this.openingTime = openingTime;
-        this.closingTime = closingTime;
+    public Schedule() {}
+
+    public Schedule(ScheduleId id, Integer openTime, Integer closeTime) {
+        this.id = id;
+        this.openTime = openTime;
+        this.closeTime = closeTime;
+    }
+
+    public ScheduleId getId() {
+        return id;
+    }
+
+    public void setId(ScheduleId id) {
+        this.id = id;
+    }
+
+    public Integer getOpenTime() {
+        return openTime;
+    }
+
+    public void setOpenTime(Integer openTime) {
+        this.openTime = openTime;
+    }
+
+    public Integer getCloseTime() {
+        return closeTime;
+    }
+
+    public void setCloseTime(Integer closeTime) {
+        this.closeTime = closeTime;
+    }
+
+    public Restaurant getRestaurant() {
+        return restaurant;
     }
 
     public void setRestaurant(Restaurant restaurant) {
