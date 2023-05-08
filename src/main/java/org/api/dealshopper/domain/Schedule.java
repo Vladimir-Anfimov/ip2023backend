@@ -59,11 +59,4 @@ public class Schedule {
         this.closeTime = closeTime;
     }
 
-    public Restaurant getRestaurant() {
-        return restaurant;
-    }
-
-    public void setRestaurant(Restaurant restaurant) {
-        this.restaurant = restaurant;
-    }
 }
