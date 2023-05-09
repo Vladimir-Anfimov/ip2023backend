@@ -21,6 +21,6 @@ public class DeliveryInfoId implements Serializable {
     private Integer restaurantId;
 
     @Column(name = "delivery_platform")
-    private Integer deliveryPlatform;
+    private String deliveryPlatform;
 
 }
