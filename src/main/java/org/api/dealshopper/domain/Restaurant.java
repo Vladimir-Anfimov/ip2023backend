@@ -42,6 +42,9 @@ public class Restaurant {
     @OneToMany(mappedBy = "restaurant")
     private List<Review> reviews;
 
+    @ManyToMany(mappedBy = "favouriteRestaurants")
+    private List<User> restaurantFans;//favourite_restaurants, useri ce au ca restaurant favorit this
+
     public Restaurant(int id, String name, String address, String phone, String image) {
         this.id = id;
         this.name = name;

@@ -53,7 +53,12 @@ public class Product {
 
     @ManyToMany
     @JoinTable(name = "ingr_prod",
-            joinColumns = @JoinColumn(name = "product_id"),
-            inverseJoinColumns = @JoinColumn(name = "ingredient_id"))
+            joinColumns = @JoinColumn(name = "product_id", referencedColumnName ="id" ),
+            inverseJoinColumns = @JoinColumn(name = "ingredient_id",referencedColumnName ="id"))
     private List<Ingredient> ingredients;
+
+
+    @ManyToMany(mappedBy = "favouriteProducts")
+    private List<User> productFans;//favourite_products, useri ce au ca produs favorit this
+
 }
