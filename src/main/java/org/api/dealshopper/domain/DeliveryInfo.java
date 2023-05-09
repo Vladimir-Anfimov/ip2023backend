@@ -53,4 +53,9 @@ public class DeliveryInfo {
     public void setDeliveryCost(Integer deliveryCost) {
         this.deliveryCost = deliveryCost;
     }
+
+    public double getEfficiency()
+    {
+        return ((double) getDeliveryTime() + (double) getDeliveryCost()) / 2;
+    }
 }

@@ -48,7 +48,8 @@ public class Restaurant {
     @ManyToMany(mappedBy = "favouriteRestaurants")
     private List<User> restaurantFans;//favourite_restaurants, useri ce au ca restaurant favorit this
 
-    public Restaurant(int id, String name, String address, String phone, String image) {
+    public Restaurant(int id, String name, String address, String phone, String image)
+    {
         this.id = id;
         this.name = name;
         this.address = address;

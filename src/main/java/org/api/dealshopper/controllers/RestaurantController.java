@@ -2,6 +2,7 @@ package org.api.dealshopper.controllers;
 
 import lombok.RequiredArgsConstructor;
 import org.api.dealshopper.domain.Restaurant;
+import org.api.dealshopper.models.SingleRestaurantResponse;
 import org.api.dealshopper.services.RestaurantService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,12 +26,29 @@ public class RestaurantController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Restaurant> getRestaurantById(@PathVariable Integer id) {
+    public ResponseEntity<?> getRestaurantById(@PathVariable Integer id, @RequestParam(required = false) String platformName)
+    {
+        SingleRestaurantResponse response;
         Restaurant restaurant = restaurantService.findRestaurantById(id);
-        if (restaurant == null) {
+
+        if (platformName == null)
+        {
+            System.out.println(restaurantService.getBestPlatform(restaurant));
+            response = restaurantService.getRestaurant(restaurant, restaurantService.getBestPlatform(restaurant));
+        }
+        else
+        {
+            response = restaurantService.getRestaurant(restaurant, platformName);
+        }
+
+        if (response == null)
+        {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok().body(restaurant);
+        else
+        {
+            return ResponseEntity.ok().body(response.getCategories());
+        }
     }
 }
 
