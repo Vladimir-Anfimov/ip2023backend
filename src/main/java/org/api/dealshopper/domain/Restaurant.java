@@ -42,6 +42,9 @@ public class Restaurant {
     @OneToMany(mappedBy = "restaurant")
     private List<Review> reviews;
 
+    @OneToMany(mappedBy = "restaurant")
+    private List<DeliveryInfo> deliveryInfoList;
+
     @ManyToMany(mappedBy = "favouriteRestaurants")
     private List<User> restaurantFans;//favourite_restaurants, useri ce au ca restaurant favorit this
 

@@ -15,7 +15,7 @@ import java.io.Serializable;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class DeliveryPriceId implements Serializable {
+public class DeliveryInfoId implements Serializable {
 
     @Column(name = "restaurant_id")
     private Integer restaurantId;
