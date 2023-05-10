@@ -15,12 +15,12 @@ import java.io.Serializable;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ScheduleId implements Serializable {
+public class DeliveryInfoId implements Serializable {
 
     @Column(name = "restaurant_id")
     private Integer restaurantId;
 
-    @Column(name = "day_of_the_week")
-    private Integer dayOfWeek;
+    @Column(name = "delivery_platform")
+    private String deliveryPlatform;
 
 }

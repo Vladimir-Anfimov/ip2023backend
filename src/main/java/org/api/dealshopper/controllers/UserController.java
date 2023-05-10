@@ -1,10 +1,8 @@
 package org.api.dealshopper.controllers;
 
 import lombok.RequiredArgsConstructor;
-import org.api.dealshopper.models.AuthenticationRequest;
-import org.api.dealshopper.models.AuthenticationResponse;
-import org.api.dealshopper.models.RegisterRequest;
-import org.api.dealshopper.models.RegisterResponse;
+import org.api.dealshopper.models.*;
+import org.api.dealshopper.services.PasswordResetService;
 import org.api.dealshopper.services.UserService;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
@@ -16,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class UserController {
     private final UserService service;
+    private final PasswordResetService passwordResetService;
 
     @PostMapping(value = "/login", consumes = "application/json")
     public ResponseEntity<?> login(
@@ -48,6 +47,26 @@ public class UserController {
         catch (Exception e)
         {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
+        }
+    }
+
+    @PostMapping("/password/reset/request")
+    public ResponseEntity<String> requestPasswordReset(@RequestParam String email) {
+        boolean result = passwordResetService.requestPasswordReset(email);
+        if (result) {
+            return ResponseEntity.ok("Password reset email sent.");
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found.");
+        }
+    }
+
+    @PostMapping("/password/reset/confirm")
+    public ResponseEntity<String> resetPassword(@RequestParam String token, @RequestBody PasswordResetRequest request) {
+        boolean result = passwordResetService.resetPassword(token, request);
+        if (result) {
+            return ResponseEntity.ok("Password reset successful.");
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid reset token.");
         }
     }
 }
