@@ -93,40 +93,50 @@ public class RestaurantService {
         return restaurantOptional.orElse(null);
     }
 
-    public SingleRestaurantResponse getRestaurant(Restaurant restaurant, String platformName) {
+    public SingleRestaurantResponse getRestaurant(Restaurant restaurant, String platformName)
+    {
         List<Category> categories = new ArrayList<>();
         List<String> categoryNames;
 
         if (platformName == null) return null;
 
-        if (restaurant != null) {
+        if (restaurant != null)
+        {
             categoryNames = restaurant.getMenu().stream().filter(p -> p.getDeliveryPlatform().equals(platformName))
-                    .map(Product::getCategory).distinct().toList();
+                            .map(Product::getCategory).distinct().toList();
 
-            for (var categoryName : categoryNames) {
+            for (var categoryName : categoryNames)
+            {
                 categories.add(new Category(categoryName,
                         restaurant
                                 .getMenu()
                                 .stream()
                                 .filter(
-                                        product -> product
-                                                .getCategory()
-                                                .equals(categoryName))
+                                        product ->  product
+                                                            .getCategory()
+                                                            .equals(categoryName)
+                                                    &&
+                                                    product
+                                                            .getDeliveryPlatform()
+                                                            .equals(platformName)
+                                )
                                 .map(ProductDto::new)
                                 .toList()
-                ));
+                        ));
             }
 
-            return new SingleRestaurantResponse(categories);
-        } else return null;
+            return new SingleRestaurantResponse(restaurant.getName(), platformName, categories);
+        }
+        else return null;
     }
+
 
     public String getBestPlatform(Restaurant restaurant) {
         try {
             return restaurant
                     .getDeliveryInfoList()
                     .stream()
-                    .max(Comparator.comparing(DeliveryInfo::getEfficiency))
+                    .min(Comparator.comparing(DeliveryInfo::getEfficiency))
                     .get()
                     .getId()
                     .getDeliveryPlatform();

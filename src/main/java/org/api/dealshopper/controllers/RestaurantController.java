@@ -16,13 +16,15 @@ import java.util.List;
 public class RestaurantController {
     private final RestaurantService restaurantService;
 
-    @GetMapping("/{id}")
-    public ResponseEntity<?> getRestaurantById(@PathVariable Integer id, @RequestParam(required = false) String platformName) {
+    @GetMapping("/{id}") 
+    public ResponseEntity<SingleRestaurantResponse> getRestaurantById(@PathVariable Integer id, @RequestParam(required = false) String platformName)
+    {
         SingleRestaurantResponse response;
         Restaurant restaurant = restaurantService.findRestaurantById(id);
 
-        if (platformName == null) {
-            System.out.println(restaurantService.getBestPlatform(restaurant));
+        if (platformName == null)
+        {
+            //System.out.println(restaurantService.getBestPlatform(restaurant));
             response = restaurantService.getRestaurant(restaurant, restaurantService.getBestPlatform(restaurant));
         } else {
             response = restaurantService.getRestaurant(restaurant, platformName);
@@ -30,8 +32,10 @@ public class RestaurantController {
 
         if (response == null) {
             return ResponseEntity.notFound().build();
-        } else {
-            return ResponseEntity.ok().body(response.getCategories());
+        }
+        else
+        {
+            return ResponseEntity.ok().body(response);
         }
     }
 
