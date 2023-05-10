@@ -26,14 +26,14 @@ public class RestaurantController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getRestaurantById(@PathVariable Integer id, @RequestParam(required = false) String platformName)
+    public ResponseEntity<SingleRestaurantResponse> getRestaurantById(@PathVariable Integer id, @RequestParam(required = false) String platformName)
     {
         SingleRestaurantResponse response;
         Restaurant restaurant = restaurantService.findRestaurantById(id);
 
         if (platformName == null)
         {
-            System.out.println(restaurantService.getBestPlatform(restaurant));
+            //System.out.println(restaurantService.getBestPlatform(restaurant));
             response = restaurantService.getRestaurant(restaurant, restaurantService.getBestPlatform(restaurant));
         }
         else
@@ -47,7 +47,7 @@ public class RestaurantController {
         }
         else
         {
-            return ResponseEntity.ok().body(response.getCategories());
+            return ResponseEntity.ok().body(response);
         }
     }
 }
