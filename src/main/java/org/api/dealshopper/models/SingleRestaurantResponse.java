@@ -13,5 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 public class SingleRestaurantResponse
 {
+    private String name;
+    private String platformName;
     private List<Category> categories;
 }

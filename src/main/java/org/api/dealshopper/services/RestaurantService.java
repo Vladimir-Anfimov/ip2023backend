@@ -53,15 +53,20 @@ public class RestaurantService
                                 .getMenu()
                                 .stream()
                                 .filter(
-                                        product -> product
-                                                    .getCategory()
-                                                    .equals(categoryName))
+                                        product ->  product
+                                                            .getCategory()
+                                                            .equals(categoryName)
+                                                    &&
+                                                    product
+                                                            .getDeliveryPlatform()
+                                                            .equals(platformName)
+                                )
                                 .map(ProductDto::new)
                                 .toList()
                         ));
             }
 
-            return new SingleRestaurantResponse(categories);
+            return new SingleRestaurantResponse(restaurant.getName(), platformName, categories);
         }
         else return null;
     }
@@ -73,7 +78,7 @@ public class RestaurantService
             return restaurant
                     .getDeliveryInfoList()
                     .stream()
-                    .max(Comparator.comparing(DeliveryInfo::getEfficiency))
+                    .min(Comparator.comparing(DeliveryInfo::getEfficiency))
                     .get()
                     .getId()
                     .getDeliveryPlatform();
