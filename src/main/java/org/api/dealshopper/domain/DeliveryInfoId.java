@@ -23,4 +23,19 @@ public class DeliveryInfoId implements Serializable {
     @Column(name = "delivery_platform")
     private String deliveryPlatform;
 
+    public String getDeliveryPlatform() {
+        return deliveryPlatform;
+    }
+
+    public Integer getRestaurantId() {
+        return restaurantId;
+    }
+
+    public void setRestaurantId(Integer restaurantId) {
+        this.restaurantId = restaurantId;
+    }
+
+    public void setDeliveryPlatform(String deliveryPlatform) {
+        this.deliveryPlatform = deliveryPlatform;
+    }
 }
