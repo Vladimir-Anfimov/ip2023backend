@@ -54,8 +54,25 @@ public class DeliveryInfo {
         this.deliveryCost = deliveryCost;
     }
 
+    public Integer getDeliveryTime() {
+        return deliveryTime;
+    }
+
+    public void setDeliveryTime(Integer deliveryTime) {
+        this.deliveryTime = deliveryTime;
+    }
+
+    public Restaurant getRestaurant() {
+        return restaurant;
+    }
+
+    public void setRestaurant(Restaurant restaurant) {
+        this.restaurant = restaurant;
+    }
+
     public double getEfficiency()
     {
         return ((double) getDeliveryTime() + (double) getDeliveryCost()) / 2;
     }
+
 }
