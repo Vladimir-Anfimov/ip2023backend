@@ -2,4 +2,13 @@ version: 0.0
 os: linux 
 files:
   - source: /
-    destination: /home/backend 
+    destination: /home/backend  
+hooks:
+  BeforeInstall:
+    - location: scripts/before.sh
+      timeout: 300
+      runas: root
+  ApplicationStart:
+    - location: scripts/after.sh
+      timeout: 300
+      runas: root
