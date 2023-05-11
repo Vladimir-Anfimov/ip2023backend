@@ -9,7 +9,7 @@ import lombok.Setter;
 import java.util.Calendar;
 import java.util.Date;
 
-@Getter
+@Getter 
 @Setter
 @Entity
 @NoArgsConstructor
