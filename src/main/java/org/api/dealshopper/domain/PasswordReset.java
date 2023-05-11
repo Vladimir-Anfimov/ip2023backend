@@ -14,11 +14,14 @@ import java.util.Date;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "reset_password")
 public class PasswordReset {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(name = "token")
     private String token;
+    @Column(name = "expiration_time")
     private Date expirationTime;
     private static final int EXPIRATION_TIME = 10;
 
