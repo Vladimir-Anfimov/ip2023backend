@@ -57,14 +57,14 @@ public class User implements UserDetails {
     @JoinTable(name = "favourites_products",
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName ="id" ),
             inverseJoinColumns = @JoinColumn(name = "products_id",referencedColumnName ="id"))
-    private List<Ingredient> favouriteProducts;
+    private List<Product> favouriteProducts;
 
 
     @ManyToMany
     @JoinTable(name = "favourites_restaurants",
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName ="id" ),
             inverseJoinColumns = @JoinColumn(name = "restaurant_id",referencedColumnName ="id"))
-    private List<Ingredient> favouriteRestaurants;
+    private List<Restaurant> favouriteRestaurants;
 
     public User(String username, String firstName, String lastName, String email, String password, String phone, String address)
     {

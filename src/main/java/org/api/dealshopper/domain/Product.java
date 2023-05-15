@@ -50,15 +50,15 @@ public class Product {
     @JoinColumn(name = "restaurant_id", referencedColumnName = "id")
     private Restaurant restaurant;
 
+    private String ingredients;
 
-    @ManyToMany
+    /*@ManyToMany
     @JoinTable(name = "ingr_prod",
             joinColumns = @JoinColumn(name = "product_id", referencedColumnName ="id" ),
             inverseJoinColumns = @JoinColumn(name = "ingredient_id",referencedColumnName ="id"))
-    private List<Ingredient> ingredients;
+    private List<Ingredient> ingredients;*/
 
 
     @ManyToMany(mappedBy = "favouriteProducts")
     private List<User> productFans;//favourite_products, useri ce au ca produs favorit this
-
 }
