@@ -6,6 +6,8 @@ import org.api.dealshopper.domain.DeliveryInfo;
 import org.api.dealshopper.domain.Product;
 import org.api.dealshopper.domain.Restaurant;
 import org.api.dealshopper.models.*;
+import org.api.dealshopper.repositories.DeliveryInfoRepository;
+import org.api.dealshopper.repositories.ProductRepository;
 import org.api.dealshopper.repositories.RestaurantRepository;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
@@ -20,6 +22,8 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class RestaurantService {
     private final RestaurantRepository restaurantRepository;
+    private final ProductRepository productRepository;
+    private final DeliveryInfoRepository deliveryInfoRepository;
 
     public PaginatedRestaurantDTO findAllRestaurants(Double minRating, Double minPrice, Double maxPrice,
                                                      Integer minDeliveryTime, Integer maxDeliveryTime, Integer pageNumber,
@@ -63,23 +67,14 @@ public class RestaurantService {
         if (platformName == null) return null;
 
         if (restaurant != null) {
-            categoryNames = restaurant.getMenu().stream().filter(p -> p.getDeliveryPlatform().equals(platformName))
-                    .map(Product::getCategory).distinct().toList();
+
+            categoryNames = productRepository.getCategoriesByRestaurantIdAndDeliveryPlatform(restaurant.getId(), platformName);
 
             for (var categoryName : categoryNames) {
                 categories.add(new Category(categoryName,
-                        restaurant
-                                .getMenu()
+                        productRepository
+                                .findByRestaurantIdAndCategoryAndDeliveryPlatform(restaurant.getId(), categoryName, platformName)
                                 .stream()
-                                .filter(
-                                        product -> product
-                                                .getCategory()
-                                                .equals(categoryName)
-                                                &&
-                                                product
-                                                        .getDeliveryPlatform()
-                                                        .equals(platformName)
-                                )
                                 .map(ProductDto::new)
                                 .toList()
                 ));
@@ -92,13 +87,7 @@ public class RestaurantService {
 
     public String getBestPlatform(Restaurant restaurant) {
         try {
-            return restaurant
-                    .getDeliveryInfoList()
-                    .stream()
-                    .min(Comparator.comparing(DeliveryInfo::getEfficiency))
-                    .get()
-                    .getId()
-                    .getDeliveryPlatform();
+            return deliveryInfoRepository.getBestDeliveryPlatformByRestaurantId(restaurant.getId()).orElse(null);
         } catch (Exception e) {
             System.err.println(e.getLocalizedMessage());
             return null;
