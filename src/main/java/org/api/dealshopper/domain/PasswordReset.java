@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -34,6 +35,13 @@ public class PasswordReset {
         this.token = token;
         this.user = user;
         this.expirationTime = this.getTokenExpirationTime();
+    }
+
+    public PasswordReset(String token, User user, Date time) {
+        super();
+        this.token = token;
+        this.user = user;
+        this.expirationTime = time;
     }
 
     public PasswordReset(String token) {

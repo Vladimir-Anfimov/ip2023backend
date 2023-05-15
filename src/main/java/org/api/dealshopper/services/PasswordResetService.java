@@ -18,32 +18,12 @@ import java.util.*;
 @Service
 @RequiredArgsConstructor
 public class PasswordResetService {
-    private static final Map<String, LocalDateTime> resetTokens = new HashMap<>();
-    private static final long RESET_TOKEN_EXPIRATION_MINUTES = 30;
+    protected static final long RESET_TOKEN_EXPIRATION_MINUTES = 30;
     private final UserRepository userRepository;
     private final EmailService emailService;
     private final PasswordEncoder passwordEncoder;
     private final PasswordResetRepository passwordResetTokenRepository;
 
-    public String generateResetToken() {
-        return UUID.randomUUID().toString();
-    }
-
-    public void storeResetToken(String email, String resetToken) {
-        resetTokens.put(resetToken, LocalDateTime.now().plusMinutes(RESET_TOKEN_EXPIRATION_MINUTES));
-    }
-
-    public boolean isResetTokenValid(String resetToken) {
-        if (resetTokens.containsKey(resetToken)) {
-            LocalDateTime expirationTime = resetTokens.get(resetToken);
-            if (expirationTime.isAfter(LocalDateTime.now())) {
-                return true;
-            } else {
-                resetTokens.remove(resetToken);
-            }
-        }
-        return false;
-    }
 
     public boolean requestPasswordReset(String email) {
         Optional<User> userOptional = userRepository.findByEmail(email);
