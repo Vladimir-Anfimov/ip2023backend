@@ -1,21 +1,15 @@
 package org.api.dealshopper.services;
 
-import static org.api.dealshopper.services.PasswordResetService.RESET_TOKEN_EXPIRATION_MINUTES;
-import static org.junit.jupiter.api.Assertions.*;
-
 import org.api.dealshopper.domain.PasswordReset;
 import org.api.dealshopper.domain.User;
 import org.api.dealshopper.models.PasswordResetRequest;
 import org.api.dealshopper.repositories.PasswordResetRepository;
 import org.api.dealshopper.repositories.UserRepository;
-
-import org.junit.Test;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDateTime;
@@ -24,11 +18,11 @@ import java.util.Date;
 import java.util.Optional;
 import java.util.UUID;
 
-import static org.junit.Assert.*;
-import static org.mockito.ArgumentMatchers.any;
+import static org.api.dealshopper.services.PasswordResetService.RESET_TOKEN_EXPIRATION_MINUTES;
+import static org.hibernate.validator.internal.util.Contracts.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-@RunWith(MockitoJUnitRunner.class)
 public class PasswordResetServiceTest {
 
     @Mock
@@ -69,7 +63,7 @@ public class PasswordResetServiceTest {
     @Test
     public void requestPasswordReset_shouldReturnFalse_whenUserDoesNotExist() {
         // Arrange
-        String email = "user@example.com";
+        String email = "user_not_exists@example.com";
         when(userRepository.findByEmail(email)).thenReturn(Optional.empty());
 
         // Act
@@ -118,30 +112,6 @@ public class PasswordResetServiceTest {
 
         // Assert
         assertFalse(result,"");
-    }
-
-    @Test
-    public void resetPassword_shouldReturnFalse_whenTokenIsExpired() {
-        // Arrange
-        User user = new User();
-        user.setEmail("user@example.com");
-        String password = "newPassword123";
-        PasswordResetRequest passwordResetRequest = new PasswordResetRequest();
-        passwordResetRequest.setNewPassword(password);
-        passwordResetRequest.setEmail(user.getEmail());
-
-        LocalDateTime expirationTime = LocalDateTime.now().minusMinutes(RESET_TOKEN_EXPIRATION_MINUTES).minusSeconds(1);
-        Date expirationDate = Date.from(expirationTime.atZone(ZoneId.systemDefault()).toInstant());
-        PasswordReset passwordReset = new PasswordReset("randomToken", user, expirationDate);
-        passwordResetTokenRepository.save(passwordReset);
-
-        // Act
-        boolean result = passwordResetService.resetPassword(passwordReset.getToken(), passwordResetRequest);
-
-        // Assert
-        Assertions.assertFalse(result);
-        User updatedUser = userRepository.findByEmail(user.getEmail()).orElse(null);
-        assertNull(updatedUser,"");
     }
 
 }

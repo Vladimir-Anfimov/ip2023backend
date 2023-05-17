@@ -27,7 +27,7 @@ public class PasswordResetService {
 
     public boolean requestPasswordReset(String email) {
         Optional<User> userOptional = userRepository.findByEmail(email);
-        if (userOptional == null) {
+        if (userOptional.isEmpty()) {
             return false;
         }
         User user = userOptional.get();
@@ -48,7 +48,7 @@ public class PasswordResetService {
 
     public boolean resetPassword(String token, PasswordResetRequest newPassword) {
         Optional<PasswordReset> obj = passwordResetTokenRepository.findByToken(token);
-        if (obj == null) {
+        if (obj.isEmpty()) {
             return false;
         }
         PasswordReset passwordResetToken = obj.get();
