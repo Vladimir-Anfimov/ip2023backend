@@ -26,7 +26,6 @@ public class AuthenticationService {
                         request.getEmail(),request.getPassword()
                 )
         );
-
         System.out.println(1);
         var user = repository.findByEmail(request.getEmail())
                 .orElseThrow();
