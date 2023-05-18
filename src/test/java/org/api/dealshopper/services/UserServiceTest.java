@@ -1,13 +1,18 @@
 package org.api.dealshopper.services;
 
+import org.api.dealshopper.controllers.UserController;
 import org.api.dealshopper.domain.User;
 import org.api.dealshopper.models.AuthenticationRequest;
 import org.api.dealshopper.models.AuthenticationResponse;
+import org.api.dealshopper.models.RegisterRequest;
+import org.api.dealshopper.models.RegisterResponse;
 import org.api.dealshopper.repositories.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -31,10 +36,12 @@ class UserServiceTest {
 
     UserService userService;
 
+
     @BeforeEach
     void setUp() {
         MockitoAnnotations.initMocks(this);
         this.userService = new UserService(null, jwtService, passwordEncoder, userRepository, authenticationManager);
+
     }
 
     @Test
@@ -162,5 +169,70 @@ class UserServiceTest {
 
         assertNotNull(authenticationResponse.getToken(), "Token should not be null");
         assertEquals(expectedToken, authenticationResponse.getToken(), "Token value should match expected value");
+    }
+
+    @Test
+    public void testRegisterValidRequestSuccessfulRegistration() {
+        // mock data
+        RegisterRequest request = new RegisterRequest();
+        request.setUsername("user");
+        request.setFirstName("firstName");
+        request.setLastName("lastName");
+        request.setEmail("test@example.com");
+        request.setPhone("0749999999");
+        request.setPassword("password");
+        request.setAddress("123 Main St");
+
+        User savedUser = new User();
+        savedUser.setId(1);
+        savedUser.setEmail("test@example.com");
+        savedUser.setPassword("password");
+        savedUser.setPhone("0749999999");
+        savedUser.setFirstName("first");
+        savedUser.setLastName("last");
+        savedUser.setAddress("12 Main St");
+        savedUser.setUsername("username");
+
+        when(userRepository.save(any(User.class))).thenReturn(savedUser);
+        when(passwordEncoder.encode(request.getPassword())).thenReturn("encodedPassword");
+        when(jwtService.generateToken(any(User.class))).thenReturn("testToken");
+        when(userRepository.findByEmail(savedUser.getEmail())).thenReturn((Optional.of(savedUser)));
+
+        // Act
+        RegisterResponse response = userService.register(request);
+
+        verify(userRepository).save(argThat(user -> {
+            return user.getUsername().equals("user") &&
+                    user.getFirstName().equals("firstName") &&
+                    user.getLastName().equals("lastName") &&
+                    user.getEmail().equals("test@example.com") &&
+                    user.getPhone().equals("0749999999") &&
+                    user.getAddress().equals("123 Main St");
+        }));
+
+        verify(passwordEncoder).encode("password");
+        verify(jwtService).generateToken(savedUser);
+        assertEquals("testToken", response.getToken());
+
+    }
+
+    @Test
+    void testRegisterUserAlreadyExists() {
+        RegisterRequest registerRequest = new RegisterRequest();
+        registerRequest.setEmail("user@example.com");
+        registerRequest.setPassword("password");
+        registerRequest.setFirstName("John");
+        registerRequest.setLastName("Doe");
+        registerRequest.setUsername("johndoe");
+        registerRequest.setPhone("123-456-7890");
+        registerRequest.setAddress("123 Main Street");
+
+        when(userRepository.findByEmail(registerRequest.getEmail()))
+                .thenReturn(Optional.of(User.builder()
+                        .email(registerRequest.getEmail())
+                        .build()));
+        when(userRepository.save(any(User.class))).thenThrow(new RuntimeException("User already exists"));
+
+        assertThrows(RuntimeException.class, () -> userService.register(registerRequest));
     }
 }
