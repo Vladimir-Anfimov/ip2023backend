@@ -28,6 +28,6 @@ jobs:
     - run: sudo su
     - run: cd /home/ec2-user/backend/_work/ip2023backend/ip2023backend
     - run: mvn clean install -DskipTests
+    - run: /home/ec2-user/backend/check_port_8090.sh
     - run: cd /home/ec2-user/backend/_work/ip2023backend/ip2023backend/target
-    - run: sudo fuser -k 8090/tcp && echo|read && echo|read
-    - run: nohup java -jar dealshopper-0.0.1-SNAPSHOT.jar &>/home/ec2-user/backend/output.log &
+    - run: nohup java -jar ./dealshopper-0.0.1-SNAPSHOT.jar &>/home/ec2-user/backend/output.log &
