@@ -75,6 +75,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         } catch (Exception e)
         {
             //401 seems more reasonable than 403
+            System.out.println(e.getMessage());
             response.setStatus(401);
         }
     }
