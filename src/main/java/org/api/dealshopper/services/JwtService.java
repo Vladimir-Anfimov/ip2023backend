@@ -6,10 +6,10 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
+import org.api.dealshopper.domain.User;
 import org.api.dealshopper.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
 import java.security.Key;
@@ -29,22 +29,36 @@ public class JwtService {
         return extractClaim(token,Claims::getSubject);
     }
 
+    /**
+     * extracts the user id from a token, it may throw exception if the token is broken
+     * so use it with try and catch
+     */
+    public Integer extractUserId(String token) throws Exception
+    {
+        Claims claims = extractAllClaims(token);
+
+        return (Integer) claims.get("userId");
+    }
+
     public <T> T extractClaim(String token, Function<Claims,T> claimsResolver)
     {
         final Claims claims=extractAllClaims(token);
         return claimsResolver.apply(claims);
     }
 
-    public String generateToken(UserDetails userDetails)
+    public String generateToken(User userDetails)
     {
-        return generateToken(new HashMap<>(),userDetails);
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("userId", userDetails.getId());
+
+        return generateToken(claims,userDetails);
     }
 
     /**
      * @return the new created token
      */
     public String generateToken(
-            Map<String, Objects> extraClaims,
+            Map<String, Object> extraClaims,
             UserDetails userDetails
     )
     {
@@ -97,6 +111,9 @@ public class JwtService {
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
+    /**
+     * validates if a token is valid and not expired
+     */
     public boolean authorizeToken(String token)
     {
         // throws exception if the secret ket is not ok
