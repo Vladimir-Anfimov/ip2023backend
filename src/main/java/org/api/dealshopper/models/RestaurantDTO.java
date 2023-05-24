@@ -29,7 +29,7 @@ public class RestaurantDTO {
     private double deliveryCost;
     private double deliveryTime;
     private String deliveryPlatform;
-
+    private DeliveryDTO delivery;
     public RestaurantDTO(Restaurant restaurant, List<DeliveryInfo> deliveryInfoList, Double minPrice, Double maxPrice,
                          Integer minDeliveryTime, Integer maxDeliveryTime) {
         this.phone = restaurant.getPhone();
@@ -49,4 +49,11 @@ public class RestaurantDTO {
         this.id = restaurant.getId();
     }
 
+    public RestaurantDTO(Restaurant restaurant) {
+        id = restaurant.getId();
+        name = restaurant.getName();
+        image = restaurant.getImage();
+        phone=restaurant.getPhone();
+        address = restaurant.getAddress();
+    }
 }

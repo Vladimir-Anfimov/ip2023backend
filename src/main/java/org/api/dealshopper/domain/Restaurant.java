@@ -114,4 +114,13 @@ public class Restaurant {
         return deliveryInfoList;
     }
 
+    @Override
+    public String toString() {
+        return "Restaurant{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                '}';
+    }
+
+
 }

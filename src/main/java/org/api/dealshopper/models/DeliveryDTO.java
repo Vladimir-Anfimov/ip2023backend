@@ -20,6 +20,7 @@ public class DeliveryDTO {
         this.deliveryTime = deliveryTime;
     }
 
+
     public Integer getDeliveryCost() {
         return deliveryCost;
     }
