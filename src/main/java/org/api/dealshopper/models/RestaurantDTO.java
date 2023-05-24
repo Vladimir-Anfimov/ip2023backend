@@ -30,6 +30,7 @@ public class RestaurantDTO {
     private double deliveryTime;
     private String deliveryPlatform;
 
+
     public RestaurantDTO(Restaurant restaurant, List<DeliveryInfo> deliveryInfoList, Double minPrice, Double maxPrice,
                          Integer minDeliveryTime, Integer maxDeliveryTime) {
         this.phone = restaurant.getPhone();
@@ -38,11 +39,16 @@ public class RestaurantDTO {
         this.rating = restaurant.getRating();
         this.address = restaurant.getAddress();
         List<DeliveryDTO> list = deliveryInfoList.stream()
-                .filter(deliveryInfo -> deliveryInfo.getDeliveryCost() >= minPrice
+                .filter(deliveryInfo -> deliveryInfo.getDeliveryCost() != null
+                        && deliveryInfo.getDeliveryTime() != null
+                        && deliveryInfo.getDeliveryCost() >= minPrice
                         && deliveryInfo.getDeliveryCost() <= maxPrice
                         && deliveryInfo.getDeliveryTime() >= minDeliveryTime
                         && deliveryInfo.getDeliveryTime() <= maxDeliveryTime)
-                .map(deliveryInfo -> new DeliveryDTO(deliveryInfo.getDeliveryCost(), deliveryInfo.getId().getDeliveryPlatform(), deliveryInfo.getDeliveryTime())).sorted(Comparator.comparingDouble(DeliveryDTO::doEfficiency)).collect(Collectors.toList());
+                .map(deliveryInfo -> new DeliveryDTO(deliveryInfo.getDeliveryCost(), deliveryInfo.getId().getDeliveryPlatform(), deliveryInfo.getDeliveryTime()))
+                .sorted(Comparator.comparingDouble(DeliveryDTO::doEfficiency))
+                .collect(Collectors.toList());
+
         this.deliveryCost = list.get(0).getDeliveryCost();
         this.deliveryTime = list.get(0).getDeliveryTime();
         this.deliveryPlatform = list.get(0).getDeliveryPlatform();

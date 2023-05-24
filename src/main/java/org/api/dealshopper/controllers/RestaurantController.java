@@ -38,7 +38,7 @@ public class RestaurantController {
     }
 
     @GetMapping
-    public ResponseEntity<PaginatedRestaurantDTO> getAllRestaurants(
+    public PaginatedRestaurantDTO getAllRestaurants(
             @RequestParam(required = false, defaultValue = "0") Double minRating,
             @RequestParam(required = false, defaultValue = "0") Double minPrice,
             @RequestParam(required = false, defaultValue = "9999") Double maxPrice,
@@ -46,14 +46,9 @@ public class RestaurantController {
             @RequestParam(required = false, defaultValue = "9999") Integer maxDeliveryTime,
             @RequestParam(required = false, defaultValue = "1") Integer pageNumber,
             @RequestParam(required = false, defaultValue = "3") Integer restaurantsPerPage) {
-        PaginatedRestaurantDTO restaurants = restaurantService.findAllRestaurants(
-                minRating, minPrice, maxPrice,
-                minDeliveryTime, maxDeliveryTime, pageNumber, restaurantsPerPage);
+        PaginatedRestaurantDTO restaurants = restaurantService.findAllRestaurants(minRating,minPrice,maxPrice,minDeliveryTime,maxDeliveryTime,pageNumber,restaurantsPerPage);
 
-        if (restaurants == null) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok().body(restaurants);
+        return restaurants;
     }
 
 }

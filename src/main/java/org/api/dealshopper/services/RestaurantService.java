@@ -26,34 +26,32 @@ public class RestaurantService {
     private final DeliveryInfoRepository deliveryInfoRepository;
 
     public PaginatedRestaurantDTO findAllRestaurants(Double minRating, Double minPrice, Double maxPrice,
-                                                     Integer minDeliveryTime, Integer maxDeliveryTime, Integer pageNumber,
-                                                     Integer restaurantsPerPage) {
+                                                     Integer minDeliveryTime, Integer maxDeliveryTime,
+                                                     Integer pageNumber, Integer restaurantsPerPage) {
 
-        Sort sort = Sort.by(Sort.Direction.ASC, "id")
-                .and(Sort.by(Sort.Direction.ASC, "rating"))
-                .and(Sort.by(Sort.Direction.ASC, "name"));
+        Pageable pageable = PageRequest.of(pageNumber, restaurantsPerPage);
+        Page<Restaurant> pageResult = restaurantRepository.findAllWithPagination(minRating, minPrice, maxPrice, minDeliveryTime, maxDeliveryTime, pageable);
 
-        Pageable pageRequest = PageRequest.of(pageNumber - 1, restaurantsPerPage, sort);
-        List<Restaurant> allRestaurants = restaurantRepository.findByRatingGreaterThanEqualAndDeliveryInfoListDeliveryCostGreaterThanEqualAndDeliveryInfoListDeliveryCostLessThanEqualAndDeliveryInfoListDeliveryTimeGreaterThanEqualAndDeliveryInfoListDeliveryTimeLessThanEqual(
-                minRating, minPrice, maxPrice, minDeliveryTime, maxDeliveryTime);
-        int totalRestaurants = allRestaurants.size();
-        //System.out.println(totalRestaurants);
-        int totalPages = (totalRestaurants + restaurantsPerPage - 1) / restaurantsPerPage;
-        if (pageNumber > totalPages || pageNumber < 1) {
-            return new PaginatedRestaurantDTO(new ArrayList<>(), pageNumber, restaurantsPerPage, totalPages, false, false);
+        List<RestaurantDTO> restaurantDTOList = new ArrayList<>();
+
+        for (Restaurant restaurant : pageResult.getContent()) {
+            List<DeliveryInfo> deliveryInfoList = restaurant.getDeliveryInfoList();
+            RestaurantDTO restaurantDTO = new RestaurantDTO(restaurant, deliveryInfoList, minPrice, maxPrice, minDeliveryTime, maxDeliveryTime);
+            restaurantDTOList.add(restaurantDTO);
         }
 
-        int startIndex = (pageNumber - 1) * restaurantsPerPage;
-        int endIndex = Math.min(startIndex + restaurantsPerPage, totalRestaurants);
-        List<Restaurant> restaurantsForPage = allRestaurants.subList(startIndex, endIndex);
-        List<RestaurantDTO> list = restaurantsForPage.stream()
-                .map(restaurant -> new RestaurantDTO(restaurant, restaurant.getDeliveryInfoList(),
-                        minPrice, maxPrice, minDeliveryTime, maxDeliveryTime)).toList();
-        boolean hasNext = pageNumber < totalPages;
-        boolean hasPrevious = pageNumber > 1;
-        return new PaginatedRestaurantDTO(list, pageNumber, restaurantsPerPage, totalPages, hasNext, hasPrevious);
-    }
+        int currentPageNumber = pageResult.getNumber();
+        int pageSize = pageResult.getSize();
+        int totalPages = pageResult.getTotalPages();
+        boolean hasNextPage = pageResult.hasNext();
+        boolean hasPreviousPage = pageResult.hasPrevious();
 
+        PaginatedRestaurantDTO paginatedRestaurantDTO = new PaginatedRestaurantDTO(restaurantDTOList, currentPageNumber, pageSize, totalPages);
+        paginatedRestaurantDTO.setHasNext(hasNextPage);
+        paginatedRestaurantDTO.setHasPrevious(hasPreviousPage);
+
+        return paginatedRestaurantDTO;
+    }
 
     public Restaurant findRestaurantById(Integer id) {
         Optional<Restaurant> restaurantOptional = restaurantRepository.findById(id);
