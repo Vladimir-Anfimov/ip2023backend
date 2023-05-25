@@ -27,37 +27,24 @@ public class FavouritesController {
     private final ProductRepository productRepository;
     private final RestaurantRepository restaurantRepository;
 
-    @GetMapping(path="products")
-    public ResponseEntity<?>  getAllProducts( @RequestHeader(value="Authorization") String authorizationHeader) {
+    @GetMapping
+    public ResponseEntity<FavouritesResponse> getAllFavourites(@RequestParam String token) {
         try {
-            String token = authorizationHeader.substring("Bearer ".length()).trim();
-            Integer userId = jwtService.extractUserId(token);
-            User user=userRepository.findById(userId).get();
-            List<Product> products=user.getFavouriteProducts();
-            List<ProductDto> productDtos = products.stream().map(ProductDto::new).collect(Collectors.toList());
-
-            return ResponseEntity.ok(productDtos);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        }
-    }
-
-    @GetMapping(path="/restaurants")
-//    public ResponseEntity<List<RestaurantDTO>> getAllRestaurants(@RequestParam String token) {
-        public ResponseEntity<List<RestaurantDTO>> getAllRestaurants( @RequestHeader(value="Authorization") String authorizationHeader) {
-            try {
-                String token = authorizationHeader.substring("Bearer ".length()).trim();
             Integer userId = jwtService.extractUserId(token);
             User user = userRepository.findById(userId).get();
+            List<Product> products = user.getFavouriteProducts();
             List<Restaurant> restaurants = user.getFavouriteRestaurants();
+            List<ProductDto> productDtos = products.stream().map(ProductDto::new).collect(Collectors.toList());
             List<RestaurantDTO> restaurantDTOs = restaurants.stream().map(RestaurantDTO::new).collect(Collectors.toList());
-            return ResponseEntity.ok(restaurantDTOs);
+            FavouritesResponse response = new FavouritesResponse(productDtos, restaurantDTOs);
+            return ResponseEntity.ok(response);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
     }
 
-    @PostMapping(path="/product/state")
+
+     @PostMapping(path="/product/state")
     public ResponseEntity<?> addOrRemoveProductFromFavourites(@RequestBody FavouriteProductRequest request,
                                                               @RequestHeader(value="Authorization") String authorizationHeader) {
         try {
