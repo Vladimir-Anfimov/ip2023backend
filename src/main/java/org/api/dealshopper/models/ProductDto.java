@@ -24,7 +24,6 @@ public class ProductDto
         name = product.getName();
         price = product.getPrice();
         imageUrl = product.getImage();
-
         ingredients = product.getIngredients();
     }
 }

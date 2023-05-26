@@ -60,6 +60,10 @@ public class User implements UserDetails {
     private List<Product> favouriteProducts;
 
 
+    public List<Product> getFavouriteProducts() {
+        return favouriteProducts;
+    }
+
     @ManyToMany
     @JoinTable(name = "favourites_restaurants",
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName ="id" ),
