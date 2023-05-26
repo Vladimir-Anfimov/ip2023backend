@@ -30,4 +30,4 @@ jobs:
     - run: cd /home/ec2-user/backend/_work/ip2023backend/ip2023backend
     - run: mvn clean install -DskipTests
     - run: cd /home/ec2-user/backend/_work/ip2023backend/ip2023backend/target
-    - run: nohup java -jar ./dealshopper-0.0.1-SNAPSHOT.jar &>/home/ec2-user/backend/output.log &
+    - run: nohup java -jar ./dealshopper-0.0.1-SNAPSHOT &>/home/ec2-user/backend/output.log &
