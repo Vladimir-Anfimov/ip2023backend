@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/favourites")
+@RequestMapping("/api/v1/favourites")
 @RequiredArgsConstructor
 public class FavouritesController {
 
