@@ -26,9 +26,13 @@ public class RestaurantDTO {
 
     private String image;
     private double rating;
+
     private double deliveryCost;
     private double deliveryTime;
     private String deliveryPlatform;
+
+
+
 
     public RestaurantDTO(Restaurant restaurant, List<DeliveryInfo> deliveryInfoList, Double minPrice, Double maxPrice,
                          Integer minDeliveryTime, Integer maxDeliveryTime) {
@@ -58,7 +62,17 @@ public class RestaurantDTO {
         id = restaurant.getId();
         name = restaurant.getName();
         image = restaurant.getImage();
-        phone=restaurant.getPhone();
+        phone = restaurant.getPhone();
         address = restaurant.getAddress();
+        rating=restaurant.getRating();
+
+        List<DeliveryDTO> list = restaurant.getDeliveryInfoList().stream()
+                .map(deliveryInfo -> new DeliveryDTO(deliveryInfo.getDeliveryCost(), deliveryInfo.getId().getDeliveryPlatform(), deliveryInfo.getDeliveryTime()))
+                .sorted(Comparator.comparingDouble(DeliveryDTO::doEfficiency))
+                .collect(Collectors.toList());
+
+        this.deliveryCost = list.get(0).getDeliveryCost();
+        this.deliveryTime = list.get(0).getDeliveryTime();
+        this.deliveryPlatform = list.get(0).getDeliveryPlatform();
     }
 }
