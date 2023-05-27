@@ -11,18 +11,19 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class PaginatedRestaurantDTO {
-    private List<RestaurantDTO> content;
+public class PaginatedRestaurantDTO2 {
+    private List<RestaurantDTO2> content;
     private int currentPageNumber;
     private int pageSize;
     private int totalPages;
     private boolean hasNext;
     private boolean hasPrevious;
-    public List<RestaurantDTO> getContent() {
+
+    public List<RestaurantDTO2> getContent() {
         return content;
     }
 
-    public void setContent(List<RestaurantDTO> content) {
+    public void setContent(List<RestaurantDTO2> content) {
         this.content = content;
     }
 
@@ -66,7 +67,7 @@ public class PaginatedRestaurantDTO {
         this.hasPrevious = hasPrevious;
     }
 
-    public PaginatedRestaurantDTO(List<RestaurantDTO> content, int pageNumber, int pageSize, int totalPages) {
+    public PaginatedRestaurantDTO2(List<RestaurantDTO2> content, int pageNumber, int pageSize, int totalPages) {
         this.content = content;
         this.currentPageNumber = pageNumber;
         this.pageSize = pageSize;

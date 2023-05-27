@@ -16,6 +16,6 @@ public interface RestaurantRepository extends PagingAndSortingRepository<Restaur
     @Query("SELECT r FROM Restaurant r JOIN r.deliveryInfoList di WHERE r.rating >= :rating AND di.deliveryCost >= :minPrice AND di.deliveryCost <= :maxPrice AND di.deliveryTime >= :minDeliveryTime AND di.deliveryTime <= :maxDeliveryTime")
     Page<Restaurant> findAllWithPagination(double rating, double minPrice, double maxPrice, int minDeliveryTime, int maxDeliveryTime, Pageable pageable);
 
-    Page<Restaurant> findAll(Pageable pageable);
 
+    Page<Restaurant> findAll(Pageable pageable);
 }

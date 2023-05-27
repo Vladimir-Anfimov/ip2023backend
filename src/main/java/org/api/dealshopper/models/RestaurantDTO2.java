@@ -1,5 +1,6 @@
 package org.api.dealshopper.models;
 
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,7 +17,7 @@ import java.util.stream.Collectors;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class RestaurantDTO {
+public class RestaurantDTO2 {
     private Integer id;
     private String name;
 
@@ -29,14 +30,10 @@ public class RestaurantDTO {
     private double deliveryCost;
     private double deliveryTime;
     private String deliveryPlatform;
-    private boolean favourite;
 
-    public void setFavourite(boolean favourite) {
-        this.favourite = favourite;
-    }
 
-    public RestaurantDTO(Restaurant restaurant, List<DeliveryInfo> deliveryInfoList, Double minPrice, Double maxPrice,
-                         Integer minDeliveryTime, Integer maxDeliveryTime) {
+    public RestaurantDTO2(Restaurant restaurant, List<DeliveryInfo> deliveryInfoList, Double minPrice, Double maxPrice,
+                          Integer minDeliveryTime, Integer maxDeliveryTime) {
         this.phone = restaurant.getPhone();
         this.name = restaurant.getName();
         this.image = restaurant.getImage();
@@ -57,31 +54,6 @@ public class RestaurantDTO {
         this.deliveryTime = list.get(0).getDeliveryTime();
         this.deliveryPlatform = list.get(0).getDeliveryPlatform();
         this.id = restaurant.getId();
-    }
-
-    public RestaurantDTO(Restaurant restaurant, List<DeliveryInfo> deliveryInfoList, Double minPrice, Double maxPrice,
-                         Integer minDeliveryTime, Integer maxDeliveryTime, boolean favorite) {
-        this.phone = restaurant.getPhone();
-        this.name = restaurant.getName();
-        this.image = restaurant.getImage();
-        this.rating = restaurant.getRating();
-        this.address = restaurant.getAddress();
-        List<DeliveryDTO> list = deliveryInfoList.stream()
-                .filter(deliveryInfo -> deliveryInfo.getDeliveryCost() != null
-                        && deliveryInfo.getDeliveryTime() != null
-                        && deliveryInfo.getDeliveryCost() >= minPrice
-                        && deliveryInfo.getDeliveryCost() <= maxPrice
-                        && deliveryInfo.getDeliveryTime() >= minDeliveryTime
-                        && deliveryInfo.getDeliveryTime() <= maxDeliveryTime)
-                .map(deliveryInfo -> new DeliveryDTO(deliveryInfo.getDeliveryCost(), deliveryInfo.getId().getDeliveryPlatform(), deliveryInfo.getDeliveryTime()))
-                .sorted(Comparator.comparingDouble(DeliveryDTO::doEfficiency))
-                .collect(Collectors.toList());
-
-        this.deliveryCost = list.get(0).getDeliveryCost();
-        this.deliveryTime = list.get(0).getDeliveryTime();
-        this.deliveryPlatform = list.get(0).getDeliveryPlatform();
-        this.id = restaurant.getId();
-        this.favourite = favorite;
     }
 
 }
