@@ -26,6 +26,7 @@ public class RestaurantDTO {
 
     private String image;
     private double rating;
+
     private double deliveryCost;
     private double deliveryTime;
     private String deliveryPlatform;
@@ -34,6 +35,8 @@ public class RestaurantDTO {
     public void setFavourite(boolean favourite) {
         this.favourite = favourite;
     }
+
+
 
     public RestaurantDTO(Restaurant restaurant, List<DeliveryInfo> deliveryInfoList, Double minPrice, Double maxPrice,
                          Integer minDeliveryTime, Integer maxDeliveryTime) {
@@ -59,20 +62,16 @@ public class RestaurantDTO {
         this.id = restaurant.getId();
     }
 
-    public RestaurantDTO(Restaurant restaurant, List<DeliveryInfo> deliveryInfoList, Double minPrice, Double maxPrice,
-                         Integer minDeliveryTime, Integer maxDeliveryTime, boolean favorite) {
-        this.phone = restaurant.getPhone();
-        this.name = restaurant.getName();
-        this.image = restaurant.getImage();
-        this.rating = restaurant.getRating();
-        this.address = restaurant.getAddress();
-        List<DeliveryDTO> list = deliveryInfoList.stream()
-                .filter(deliveryInfo -> deliveryInfo.getDeliveryCost() != null
-                        && deliveryInfo.getDeliveryTime() != null
-                        && deliveryInfo.getDeliveryCost() >= minPrice
-                        && deliveryInfo.getDeliveryCost() <= maxPrice
-                        && deliveryInfo.getDeliveryTime() >= minDeliveryTime
-                        && deliveryInfo.getDeliveryTime() <= maxDeliveryTime)
+
+    public RestaurantDTO(Restaurant restaurant) {
+        id = restaurant.getId();
+        name = restaurant.getName();
+        image = restaurant.getImage();
+        phone = restaurant.getPhone();
+        address = restaurant.getAddress();
+        rating=restaurant.getRating();
+
+        List<DeliveryDTO> list = restaurant.getDeliveryInfoList().stream()
                 .map(deliveryInfo -> new DeliveryDTO(deliveryInfo.getDeliveryCost(), deliveryInfo.getId().getDeliveryPlatform(), deliveryInfo.getDeliveryTime()))
                 .sorted(Comparator.comparingDouble(DeliveryDTO::doEfficiency))
                 .collect(Collectors.toList());
@@ -80,8 +79,6 @@ public class RestaurantDTO {
         this.deliveryCost = list.get(0).getDeliveryCost();
         this.deliveryTime = list.get(0).getDeliveryTime();
         this.deliveryPlatform = list.get(0).getDeliveryPlatform();
-        this.id = restaurant.getId();
-        this.favourite = favorite;
+        this.favourite=true;
     }
-
 }

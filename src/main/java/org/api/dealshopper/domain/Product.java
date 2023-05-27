@@ -61,4 +61,14 @@ public class Product {
 
     @ManyToMany(mappedBy = "favouriteProducts")
     private List<User> productFans;//favourite_products, useri ce au ca produs favorit this
+
+    @Override
+    public String toString() {
+        return "Product{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", price=" + price +
+                '}';
+    }
+
 }
