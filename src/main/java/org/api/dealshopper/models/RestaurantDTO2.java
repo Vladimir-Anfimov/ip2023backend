@@ -1,5 +1,6 @@
 package org.api.dealshopper.models;
 
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,7 +17,7 @@ import java.util.stream.Collectors;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class RestaurantDTO {
+public class RestaurantDTO2 {
     private Integer id;
     private String name;
 
@@ -26,20 +27,13 @@ public class RestaurantDTO {
 
     private String image;
     private double rating;
-
     private double deliveryCost;
     private double deliveryTime;
     private String deliveryPlatform;
-    private boolean favourite;
-
-    public void setFavourite(boolean favourite) {
-        this.favourite = favourite;
-    }
 
 
-
-    public RestaurantDTO(Restaurant restaurant, List<DeliveryInfo> deliveryInfoList, Double minPrice, Double maxPrice,
-                         Integer minDeliveryTime, Integer maxDeliveryTime) {
+    public RestaurantDTO2(Restaurant restaurant, List<DeliveryInfo> deliveryInfoList, Double minPrice, Double maxPrice,
+                          Integer minDeliveryTime, Integer maxDeliveryTime) {
         this.phone = restaurant.getPhone();
         this.name = restaurant.getName();
         this.image = restaurant.getImage();
@@ -62,23 +56,4 @@ public class RestaurantDTO {
         this.id = restaurant.getId();
     }
 
-
-    public RestaurantDTO(Restaurant restaurant) {
-        id = restaurant.getId();
-        name = restaurant.getName();
-        image = restaurant.getImage();
-        phone = restaurant.getPhone();
-        address = restaurant.getAddress();
-        rating=restaurant.getRating();
-
-        List<DeliveryDTO> list = restaurant.getDeliveryInfoList().stream()
-                .map(deliveryInfo -> new DeliveryDTO(deliveryInfo.getDeliveryCost(), deliveryInfo.getId().getDeliveryPlatform(), deliveryInfo.getDeliveryTime()))
-                .sorted(Comparator.comparingDouble(DeliveryDTO::doEfficiency))
-                .collect(Collectors.toList());
-
-        this.deliveryCost = list.get(0).getDeliveryCost();
-        this.deliveryTime = list.get(0).getDeliveryTime();
-        this.deliveryPlatform = list.get(0).getDeliveryPlatform();
-        this.favourite=true;
-    }
 }
