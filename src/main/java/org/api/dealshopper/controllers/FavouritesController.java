@@ -28,8 +28,9 @@ public class FavouritesController {
     private final RestaurantRepository restaurantRepository;
 
     @GetMapping
-    public ResponseEntity<FavouritesResponse> getAllFavourites(@RequestParam String token) {
+    public ResponseEntity<FavouritesResponse> getAllFavourites (@RequestHeader(value="Authorization") String authorizationHeader) {
         try {
+            String token = authorizationHeader.substring("Bearer ".length()).trim();
             Integer userId = jwtService.extractUserId(token);
             User user = userRepository.findById(userId).get();
             List<Product> products = user.getFavouriteProducts();
@@ -68,7 +69,7 @@ public class FavouritesController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
-    /*
+
     @PostMapping(path="/restaurant/state")
     public ResponseEntity<?> addOrRemoveRestaurantFromFavourites(@RequestBody FavouriteRestaurantRequest request,
                                                                  @RequestHeader(value="Authorization") String authorizationHeader) {
@@ -87,14 +88,11 @@ public class FavouritesController {
             } else {
                 throw new RuntimeException("Invalid action provided");
             }
-
             userRepository.save(user);
-
             return ResponseEntity.ok().build();
 
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
-     */
 }
