@@ -30,7 +30,7 @@ class RestaurantControllerTest
     void setUp()
     {
         MockitoAnnotations.openMocks(this);
-        restaurantController = new RestaurantController(restaurantService);
+        //restaurantController = new RestaurantController(restaurantService);
     }
 
     @Test
