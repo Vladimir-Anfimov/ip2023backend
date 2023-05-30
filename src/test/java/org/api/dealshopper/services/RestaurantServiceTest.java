@@ -33,7 +33,7 @@ class RestaurantServiceTest {
     void setUp()
     {
         MockitoAnnotations.initMocks(this);
-        restaurantService = new RestaurantService(restaurantRepository, productRepository, deliveryInfoRepository);
+        //restaurantService = new RestaurantService(restaurantRepository, productRepository, deliveryInfoRepository);
     }
 
     @Test
