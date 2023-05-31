@@ -103,7 +103,7 @@ public class RestaurantService {
         return restaurantOptional.orElse(null);
     }
 
-    public SingleRestaurantResponse getRestaurant(Restaurant restaurant, String platformName) {
+    public SingleRestaurantResponse getRestaurant(Restaurant restaurant, String platformName, Integer userId) {
         List<Category> categories = new ArrayList<>();
         List<String> categoryNames;
 
@@ -118,7 +118,7 @@ public class RestaurantService {
                         productRepository
                                 .findByRestaurantIdAndCategoryAndDeliveryPlatform(restaurant.getId(), categoryName, platformName)
                                 .stream()
-                                .map(ProductDto::new)
+                                .map(product -> new ProductDto(product, userId))
                                 .toList()
                 ));
             }

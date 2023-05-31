@@ -28,15 +28,31 @@ public class RestaurantController {
 
 
     @GetMapping("/{id}")
-    public ResponseEntity<SingleRestaurantResponse> getRestaurantById(@PathVariable Integer id, @RequestParam(required = false) String platformName) {
+    public ResponseEntity<SingleRestaurantResponse> getRestaurantById(
+            @PathVariable Integer id,
+            @RequestParam(required = false) String platformName,
+            @RequestHeader(required = false, value = "Authorization", defaultValue = "Bearer defaultValue") String authorizationHeader)
+    {
+        String jwt = authorizationHeader.substring("Bearer ".length()).trim();
+        Integer userId;
+
+        if (jwt == null || jwt.isEmpty())
+        {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        try {
+            userId = jwtService.extractUserId(jwt);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
         SingleRestaurantResponse response;
         Restaurant restaurant = restaurantService.findRestaurantById(id);
 
         if (platformName == null) {
-            //System.out.println(restaurantService.getBestPlatform(restaurant));
-            response = restaurantService.getRestaurant(restaurant, restaurantService.getBestPlatform(restaurant));
+            response = restaurantService.getRestaurant(restaurant, restaurantService.getBestPlatform(restaurant), userId);
         } else {
-            response = restaurantService.getRestaurant(restaurant, platformName);
+            response = restaurantService.getRestaurant(restaurant, platformName, userId);
         }
 
         if (response == null) {
