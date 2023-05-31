@@ -16,6 +16,7 @@ public interface ProductRepository extends JpaRepository<Product, Integer>
 
     List<Product> findByRestaurantId(Integer restaurantId);
 
+
     List<Product> findByRestaurantIdAndCategoryAndDeliveryPlatform(Integer restaurantId, String category, String deliveryPlatform);
 
     @Query(value = "SELECT distinct category FROM products WHERE restaurant_id = :restaurantId and delivery_platform LIKE :deliveryPlatform", nativeQuery = true)
